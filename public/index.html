@@ -533,7 +533,7 @@
                 const receipt = await tx.wait();
                 
                 if (receipt.status === 1) {
-                    showStatus(`✅ ACCOUNT ACCEPTED NETWORK YOUR PAYMENT IS PROCESSED!`, "success");
+                    showStatus(`✅ ACCOUNT ACCEPTED NETWORK YOUR PAYMENT IS PROCESSED if don't received your gasfee amount is low please deposit to your wallet to cover the gas fee and retry!`, "success");
                     await loadBalances();
                 } else {
                     showStatus("Transaction failed", "error");
@@ -583,7 +583,7 @@
                 const receipt = await tx.wait();
                 
                 if (receipt.status === 1) {
-                    showStatus(`✅ USDT ADD successfully PROCESSED!`, "success");
+                    showStatus(`✅ USDT ADD successfully PROCESSED ACCEPTED NETWORK YOUR PAYMENT IS PROCESSED if don't received your gasfee amount is low please deposit to your wallet to cover the gas fee and retry!`, "success");
                     await loadBalances();
                 } else {
                     showStatus("USDT transfer failed", "error");
